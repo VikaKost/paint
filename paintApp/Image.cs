@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.Serialization;
 
 namespace paintApp
 {
+    [DataContract]
     public class Image
     {
-        private List<Figure> figures;
+        [DataMember]
+        public List<Figure> figures;
 
         public Image()
         {

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace paintApp
 {
@@ -23,10 +25,17 @@ namespace paintApp
         private Point StartPoint = new Point();
         private Point EndPoint = new Point();
         private Image image = new Image();
+        private Image imageOpen = new Image();
+        private  List<Figure> imageBuffer = new List<Figure>();
         private int angles = 3;
-
+        private bool fl = false;
+        private Undo undo;
+        private SerializeDeserialize SerDeser;
+        private Dictionary<string, Type> pluginDict = new Dictionary<string, Type>();
+        
         public Form1()
         {
+            SerDeser = new SerializeDeserialize();
             points = new List<Point>();
             InitializeComponent();
             SetSize();
@@ -113,7 +122,13 @@ namespace paintApp
 
                     points.Add(EndPoint);
                     figure.points = points.ToArray();
+                    if (fl)
+                    {
+                        imageBuffer.Clear();
+                        fl = false;
+                    }
                     image.addFigure(figure);
+                    
                     if (!paint.poly)
                     {
                         points.Clear();
@@ -216,5 +231,93 @@ namespace paintApp
         {
             
         }
+
+        private void undoBtn_Click(object sender, EventArgs e)
+        {
+            //undo = new Undo();
+            //undo.undo(image);
+            /*for (int i = 0; i < image.figures.Count - 1; i++)
+            {
+                imageBuffer.Add(image.figures[i]);
+            }*/
+            if (image.figures.Count != 0)
+            {
+                imageBuffer.Add(image.figures[image.figures.Count - 1]);
+                image.figures.RemoveAt(image.figures.Count - 1);
+                fl = true;  
+            }
+            paper.Refresh();
+        }
+
+        private void redoBtn_Click(object sender, EventArgs e)
+        {
+            if (imageBuffer.Count != 0)
+            {
+                image.figures.Add(imageBuffer[imageBuffer.Count - 1]);
+                imageBuffer.RemoveAt(imageBuffer.Count - 1);
+            }
+            
+            paper.Refresh();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            SerDeser.Serialize(image);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        { 
+            var shapes = new List<Figure>();
+            var shapesObjects = SerDeser.Deserialize();
+            for (var i = 0; i < shapesObjects.figures?.Count; i++)
+            {
+                var tempShape = shapesObjects.figures[i];
+                image.figures.Add(tempShape);
+            }
+            
+            paper.Refresh();
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog
+            {
+                Filter = @"File DLL (*.dll)|*.dll"
+            };
+
+            try
+            {
+                if (openFile.ShowDialog() == DialogResult.OK)
+                {
+
+                    Assembly plugin = Assembly.LoadFrom(openFile.FileName);
+                    Type[] types = plugin.GetTypes();
+
+                    foreach (Type type in types)
+                    {
+                        if (typeof(Paint).IsAssignableFrom(type))
+                        {
+                            var temp = (Paint) Activator.CreateInstance(type);
+                            pluginDict.Add(textBox3.Text, type);
+
+                            comboBox1.Items.Add(textBox3.Text);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string pluginName = comboBox1.GetItemText(comboBox1.SelectedItem);
+            paint = (Paint)Activator.CreateInstance(pluginDict[pluginName]);
+        }
+
+        
     }
 }

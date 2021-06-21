@@ -1,7 +1,8 @@
 ﻿using System.Drawing;
-
+using System.Runtime.Serialization;
 namespace paintApp
 {
+    [DataContract]
     public class Polyline : Figure
     {
         private Brush brush;
