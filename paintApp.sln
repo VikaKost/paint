@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "paintApp", "paintApp\paintApp.csproj", "{086107A8-8A0F-4A0D-8114-9EAAA51B84EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trapez", "Trapez\Trapez.csproj", "{F14C40D6-B681-4C9B-AAA2-532B740F77E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{086107A8-8A0F-4A0D-8114-9EAAA51B84EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{086107A8-8A0F-4A0D-8114-9EAAA51B84EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{086107A8-8A0F-4A0D-8114-9EAAA51B84EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F14C40D6-B681-4C9B-AAA2-532B740F77E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F14C40D6-B681-4C9B-AAA2-532B740F77E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F14C40D6-B681-4C9B-AAA2-532B740F77E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F14C40D6-B681-4C9B-AAA2-532B740F77E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

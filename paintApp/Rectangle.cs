@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.Serialization;
 
 
 namespace paintApp
 {
+    [DataContract]
     public class Rectangle : Figure
     {
+        [DataMember]
         private Brush brush;
         public Rectangle(Pen pen, Color fillColor, int angles) : base(pen, fillColor, angles)
         {

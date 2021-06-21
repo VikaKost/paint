@@ -1,11 +1,15 @@
-﻿using System;
+﻿using System.Runtime.Serialization;
+using System;
 using System.Drawing;
 
 namespace paintApp
 {
+    [DataContract]
     public class Polygon : Figure
     {
+        [DataMember]
         private Brush brush;
+        [DataMember]
         private int ang;
         public Polygon(Pen pen, Color fillColor, int angles) : base(pen, fillColor, angles)
         {
